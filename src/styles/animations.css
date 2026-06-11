@@ -1,0 +1,79 @@
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(4deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    opacity: 0.7;
+    transform: scale(0.92);
+  }
+  70% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
+}
+
+@keyframes progress-shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(220%);
+  }
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+.animate-fade-rise {
+  animation: fade-rise 0.55s ease-out both;
+}
+
+.particle-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.particle-field span {
+  position: absolute;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 999px;
+  background: rgba(134, 239, 172, 0.42);
+  box-shadow: 0 0 22px rgba(34, 197, 94, 0.42);
+  animation: float-slow var(--duration, 9s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.progress-shine::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  animation: progress-shine 2.4s ease-in-out infinite;
+}

@@ -1,0 +1,309 @@
+GUIA PARA HACER FUNCIONAR ECOSAFE ODS EN OTRA MAQUINA
+========================================================
+
+Proyecto: EcoSafe ODS
+Tecnologias: React, Vite, Tailwind CSS, Supabase, Chart.js, Leaflet, Framer Motion y Canvas API.
+Version recomendada de Node.js: 20.19.6
+Version de npm usada en el equipo original: 10.8.2
+
+
+1. QUE NECESITA LA OTRA LAPTOP
+-----------------------------
+
+Debe tener:
+
+1. Windows 10 o Windows 11 de 64 bits.
+2. Internet.
+3. Node.js v20.19.6.
+4. npm, que se instala junto con Node.js.
+5. Un navegador moderno: Chrome, Edge, Firefox o Brave.
+6. La carpeta del proyecto "ecosafe-iso".
+7. El archivo .env.local con tus credenciales de Supabase.
+
+No necesita tener Supabase instalado en la laptop.
+Supabase funciona en la nube, por eso tu base de datos no depende de que tu laptop principal este encendida.
+
+
+2. DESCARGAR NODE.JS 20.19.6
+----------------------------
+
+OPCION FACIL:
+
+Descargar el instalador oficial de Windows 64 bits:
+
+https://nodejs.org/dist/v20.19.6/node-v20.19.6-x64.msi
+
+Instalarlo normalmente con Next, Next, Install.
+
+Despues abre PowerShell y verifica:
+
+node -v
+npm -v
+
+Debe salir algo parecido a:
+
+v20.19.6
+10.8.2
+
+
+3. SI YA INSTALASTE NODE 26 O UNA VERSION DIFERENTE
+---------------------------------------------------
+
+Si instalaste Node 26 y te da errores, lo mas simple es desinstalarlo:
+
+1. Abrir Configuracion de Windows.
+2. Ir a Aplicaciones.
+3. Buscar Node.js.
+4. Desinstalar.
+5. Reiniciar la laptop.
+6. Instalar Node.js 20.19.6 desde el enlace anterior.
+
+Luego verificar:
+
+node -v
+
+Debe mostrar:
+
+v20.19.6
+
+
+4. COPIAR EL PROYECTO
+---------------------
+
+Copia la carpeta completa:
+
+ecosafe-iso
+
+Puedes copiarla por USB, WinRAR, Google Drive, OneDrive o GitHub.
+
+Recomendacion:
+No es necesario copiar la carpeta node_modules.
+Si la copias, puede pesar mucho y a veces falla en otra maquina.
+
+Lo ideal es copiar el proyecto sin node_modules y luego ejecutar npm install.
+
+
+5. CREAR O COPIAR EL ARCHIVO .env.local
+---------------------------------------
+
+Dentro de la carpeta ecosafe-iso debe existir este archivo:
+
+.env.local
+
+Contenido del archivo:
+
+VITE_SUPABASE_URL=https://TU-PROYECTO.supabase.co
+VITE_SUPABASE_ANON_KEY=TU-ANON-KEY
+
+IMPORTANTE:
+
+1. No uses comillas.
+2. No agregues punto y coma.
+3. No cambies los nombres VITE_SUPABASE_URL y VITE_SUPABASE_ANON_KEY.
+4. El archivo debe estar dentro de ecosafe-iso, al mismo nivel que package.json.
+5. Si este archivo no existe o esta mal escrito, el login y los datos de Supabase no van a funcionar.
+
+Ejemplo de ubicacion correcta:
+
+ecosafe-iso
+  package.json
+  .env.local
+  src
+  supabase
+
+
+6. ABRIR LA TERMINAL EN LA CARPETA CORRECTA
+-------------------------------------------
+
+Abre PowerShell y entra a la carpeta del proyecto.
+
+Ejemplo:
+
+cd "C:\Users\TU_USUARIO\Desktop\ecosafe-iso"
+
+Verifica que estas en la carpeta correcta:
+
+dir
+
+Debes ver un archivo llamado:
+
+package.json
+
+Si no ves package.json, estas en la carpeta incorrecta.
+
+
+7. INSTALAR DEPENDENCIAS
+------------------------
+
+Dentro de la carpeta ecosafe-iso ejecuta:
+
+npm install
+
+Esto descarga las librerias del proyecto:
+
+- React
+- Vite
+- Tailwind CSS
+- Supabase
+- Chart.js
+- Leaflet
+- Framer Motion
+- Lucide React
+- React Router
+
+Este paso necesita internet.
+
+
+8. EJECUTAR EL PROYECTO
+-----------------------
+
+Cuando termine npm install, ejecuta:
+
+npm run dev
+
+OJO:
+El comando correcto es "npm run dev".
+No es "npm dun dev".
+
+Si todo esta bien, Vite mostrara una URL parecida a:
+
+http://localhost:5173/
+
+Abre esa URL en el navegador.
+
+
+9. SI EL PUERTO 5173 ESTA OCUPADO
+---------------------------------
+
+Puede salir otra URL, por ejemplo:
+
+http://localhost:5174/
+
+Eso esta bien.
+Abre la URL que te muestre la terminal.
+
+
+10. PROBAR QUE SUPABASE FUNCIONA
+--------------------------------
+
+Para validar que la conexion esta funcionando:
+
+1. Abre la app en el navegador.
+2. Intenta iniciar sesion con un usuario existente.
+3. Si no tienes usuario, registrate.
+4. Entra al dashboard.
+5. Revisa si cargan las tarjetas y los graficos.
+6. Entra al mapa y revisa si cargan las zonas.
+7. Entra al videojuego, juega y verifica si guarda puntaje.
+
+Si puedes iniciar sesion y cargar datos, Supabase esta conectado.
+
+
+11. ERRORES COMUNES Y SOLUCIONES
+--------------------------------
+
+ERROR: "npm no se reconoce como comando"
+
+Solucion:
+Node.js no esta instalado correctamente o falta reiniciar.
+Reinstala Node.js 20.19.6 y reinicia la laptop.
+
+
+ERROR: "npm dun dev"
+
+Solucion:
+El comando esta mal escrito.
+Usa:
+
+npm run dev
+
+
+ERROR: "Unsupported engine" o errores grandes de Vite
+
+Solucion:
+Probablemente estas usando una version de Node incompatible.
+Instala Node.js 20.19.6 y verifica:
+
+node -v
+
+
+ERROR: "Missing Supabase environment variables"
+
+Solucion:
+Falta el archivo .env.local o esta mal escrito.
+Debe estar junto a package.json.
+
+
+ERROR: "permission denied for table ..."
+
+Solucion:
+Faltan policies RLS en Supabase o no se ejecuto bien el SQL.
+Revisar los archivos dentro de la carpeta supabase.
+
+
+ERROR: La app abre, pero no carga datos
+
+Solucion:
+Revisa:
+
+1. Que .env.local tenga la URL y anon key correctas.
+2. Que la laptop tenga internet.
+3. Que las tablas existan en Supabase.
+4. Que las policies permitan lectura al usuario autenticado.
+5. Que hayas iniciado sesion.
+
+
+ERROR: Pantalla en blanco
+
+Solucion:
+
+1. Cierra el servidor con Ctrl + C.
+2. Borra node_modules manualmente desde el explorador.
+3. Borra package-lock.json solo si npm install sigue fallando.
+4. Ejecuta otra vez:
+
+npm install
+npm run dev
+
+
+12. COMANDOS FINALES RESUMIDOS
+------------------------------
+
+cd "C:\RUTA\DONDE\ESTA\ecosafe-iso"
+node -v
+npm -v
+npm install
+npm run dev
+
+
+13. VERSIONES IMPORTANTES DEL PROYECTO
+--------------------------------------
+
+Node.js recomendado:
+20.19.6
+
+npm usado:
+10.8.2
+
+Vite instalado:
+8.x
+
+React:
+19.x
+
+
+14. COMO COMPARTIRLO CORRECTAMENTE
+----------------------------------
+
+Para compartir el proyecto con otra persona:
+
+1. Entrega la carpeta ecosafe-iso.
+2. Entrega tambien el archivo .env.local por separado si esa persona debe conectarse a tu Supabase.
+3. No publiques .env.local en GitHub.
+4. La otra persona instala Node.js 20.19.6.
+5. La otra persona ejecuta npm install.
+6. La otra persona ejecuta npm run dev.
+
+Tu base de datos se mantiene porque esta en Supabase Cloud.
+No necesitas prender tu laptop principal para que la otra maquina use la base de datos.
+
