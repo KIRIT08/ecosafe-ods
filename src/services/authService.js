@@ -49,6 +49,23 @@ export async function signUpWithEmail({ email, password, nombre }) {
   return data
 }
 
+export async function sendPasswordRecoveryEmail(email) {
+  const redirectTo = `${window.location.origin}/reset-password`
+  const { data, error } = await getSupabaseClient().auth.resetPasswordForEmail(email, {
+    redirectTo,
+  })
+
+  if (error) throw withFriendlyAuthError(error)
+  return data
+}
+
+export async function updatePassword(password) {
+  const { data, error } = await getSupabaseClient().auth.updateUser({ password })
+
+  if (error) throw withFriendlyAuthError(error)
+  return data
+}
+
 export async function signOut() {
   const { error } = await getSupabaseClient().auth.signOut()
 

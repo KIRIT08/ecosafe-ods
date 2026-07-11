@@ -1,5 +1,6 @@
 export function createInputController() {
   const keys = new Set()
+  const touchKeys = new Set()
 
   function onKeyDown(event) {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' ', 'KeyW', 'KeyA', 'KeyS', 'KeyD'].includes(event.code)) {
@@ -17,9 +18,32 @@ export function createInputController() {
 
   return {
     keys,
+    setTouchDirection(direction, active) {
+      const keyByDirection = {
+        up: 'ArrowUp',
+        down: 'ArrowDown',
+        left: 'ArrowLeft',
+        right: 'ArrowRight',
+      }
+      const key = keyByDirection[direction]
+      if (!key) return
+
+      if (active) {
+        touchKeys.add(key)
+      } else {
+        touchKeys.delete(key)
+      }
+    },
+    clearTouchDirections() {
+      touchKeys.clear()
+    },
+    get activeKeys() {
+      return new Set([...keys, ...touchKeys])
+    },
     destroy() {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
+      touchKeys.clear()
     },
   }
 }

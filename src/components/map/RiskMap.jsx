@@ -1,5 +1,6 @@
 import L from 'leaflet'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import { useEffect } from 'react'
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 import { getRiskMeta } from '../../utils/riskColors'
 import RiskLegend from './RiskLegend'
 import RiskPopup from './RiskPopup'
@@ -18,7 +19,22 @@ function createRiskIcon(level) {
   })
 }
 
-function RiskMap({ zones }) {
+function MapFocus({ zone }) {
+  const map = useMap()
+
+  useEffect(() => {
+    if (!zone?.latitud || !zone?.longitud) return
+
+    map.flyTo([Number(zone.latitud), Number(zone.longitud)], 7, {
+      animate: true,
+      duration: 0.8,
+    })
+  }, [map, zone])
+
+  return null
+}
+
+function RiskMap({ zones, onZoneSelect, selectedZone }) {
   return (
     <div className="ecosafe-map relative border border-emerald-300/15">
       <MapContainer center={peruCenter} zoom={5} scrollWheelZoom className="z-0">
@@ -26,14 +42,18 @@ function RiskMap({ zones }) {
           attribution="&copy; OpenStreetMap"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <MapFocus zone={selectedZone} />
         {zones.map((zone) => (
           <Marker
             key={zone.id}
             icon={createRiskIcon(zone.nivel_riesgo)}
             position={[Number(zone.latitud), Number(zone.longitud)]}
+            eventHandlers={{
+              click: () => onZoneSelect?.(zone),
+            }}
           >
             <Popup className="ecosafe-map-popup" closeButton>
-              <RiskPopup zone={zone} />
+              <RiskPopup zone={zone} onViewDetails={() => onZoneSelect?.(zone)} />
             </Popup>
           </Marker>
         ))}

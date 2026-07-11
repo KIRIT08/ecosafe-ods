@@ -43,12 +43,120 @@
   }
 }
 
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes ambient-drift {
+  0% {
+    transform: translate3d(-8%, 0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+  50% {
+    transform: translate3d(8%, -4%, 0) rotate(2deg);
+    opacity: 0.16;
+  }
+  100% {
+    transform: translate3d(-8%, 0, 0) rotate(0deg);
+    opacity: 0.08;
+  }
+}
+
+@keyframes symbol-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(-5deg);
+    opacity: 0.12;
+  }
+  50% {
+    transform: translate3d(0, -28px, 0) rotate(7deg);
+    opacity: 0.32;
+  }
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(240%);
+  }
+}
+
 .animate-float-slow {
   animation: float-slow 8s ease-in-out infinite;
 }
 
 .animate-fade-rise {
   animation: fade-rise 0.55s ease-out both;
+}
+
+.animate-marquee {
+  animation: marquee 24s linear infinite;
+}
+
+.animation-delay-0 {
+  animation-delay: 0s;
+}
+
+.animation-delay-2 {
+  animation-delay: -2s;
+}
+
+.animation-delay-4 {
+  animation-delay: -4s;
+}
+
+.ambient-wave {
+  position: absolute;
+  width: 42rem;
+  height: 42rem;
+  border-radius: 999px;
+  border: 1px solid rgba(190, 242, 100, 0.1);
+  background:
+    radial-gradient(circle, rgba(132, 204, 22, 0.08), transparent 58%),
+    conic-gradient(from 160deg, transparent, rgba(14, 165, 233, 0.1), transparent);
+  filter: blur(1px);
+  animation: ambient-drift 18s ease-in-out infinite;
+}
+
+.ambient-wave-a {
+  left: -12rem;
+  top: 12rem;
+}
+
+.ambient-wave-b {
+  right: -16rem;
+  bottom: -8rem;
+  animation-duration: 23s;
+  animation-delay: -7s;
+}
+
+.ambient-symbol {
+  position: absolute;
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border: 1px solid rgba(190, 242, 100, 0.12);
+  border-radius: 0.75rem;
+  color: rgba(190, 242, 100, 0.88);
+  background: rgba(19, 50, 43, 0.22);
+  box-shadow: 0 0 18px rgba(132, 204, 22, 0.1);
+  animation: symbol-drift var(--duration, 12s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+.impact-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(190, 242, 100, 0.07), transparent);
+  animation: scanline 7s ease-in-out infinite;
 }
 
 .particle-field {

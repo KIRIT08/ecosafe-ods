@@ -3,12 +3,17 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, Leaf, Lock, Mail, ShieldCheck } from 'lucide-react'
 import AuthShell from '../components/auth/AuthShell'
 import { useAuth } from '../hooks/useAuth'
+import { sendPasswordRecoveryEmail } from '../services/authService'
+
+const rememberedEmailKey = 'ecosafe_ods_remembered_email'
 
 function Login() {
   const navigate = useNavigate()
   const location = useLocation()
   const { hasSupabaseUrlPath, isAuthenticated, isSupabaseConfigured, login } = useAuth()
-  const [email, setEmail] = useState('')
+  const [email, setEmail] = useState(() =>
+    typeof window !== 'undefined' ? window.localStorage.getItem(rememberedEmailKey) || '' : '',
+  )
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [remember, setRemember] = useState(true)
@@ -39,11 +44,52 @@ function Login() {
 
     try {
       await login({ email, password })
+      if (remember) {
+        window.localStorage.setItem(rememberedEmailKey, email)
+      } else {
+        window.localStorage.removeItem(rememberedEmailKey)
+      }
       navigate(redirectTo, { replace: true })
     } catch (error) {
       setStatus({
         type: 'error',
         message: error.message || 'No se pudo iniciar sesion.',
+      })
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  async function handleRecoverAccess() {
+    if (!isSupabaseConfigured) {
+      setStatus({
+        type: 'error',
+        message: 'Configura Supabase antes de recuperar acceso.',
+      })
+      return
+    }
+
+    if (!email) {
+      setStatus({
+        type: 'error',
+        message: 'Escribe tu correo electronico para enviarte el enlace de recuperacion.',
+      })
+      return
+    }
+
+    setSubmitting(true)
+    setStatus({ type: '', message: '' })
+
+    try {
+      await sendPasswordRecoveryEmail(email)
+      setStatus({
+        type: 'success',
+        message: 'Te enviamos un enlace de recuperacion. Revisa tu correo.',
+      })
+    } catch (error) {
+      setStatus({
+        type: 'error',
+        message: error.message || 'No se pudo enviar el correo de recuperacion.',
       })
     } finally {
       setSubmitting(false)
@@ -132,7 +178,12 @@ function Login() {
             />
             Recordarme
           </label>
-          <button type="button" className="font-bold text-lime-300">
+          <button
+            type="button"
+            onClick={handleRecoverAccess}
+            disabled={submitting}
+            className="font-bold text-lime-300 transition hover:text-lime-200 disabled:cursor-not-allowed disabled:opacity-60"
+          >
             Recuperar acceso
           </button>
         </div>

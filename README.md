@@ -4,6 +4,20 @@ EcoSafe ODS es una plataforma web multimedia enfocada en los Objetivos de Desarr
 
 La aplicacion permite aprender sobre sostenibilidad mediante dashboard, mapa interactivo, videojuego Canvas, biblioteca educativa, reportes visuales y perfil gamificado. La informacion principal se obtiene desde Supabase PostgreSQL.
 
+## Contribucion social
+
+EcoSafe ODS contribuye a la sociedad como una herramienta educativa de sensibilizacion ambiental y social. Su objetivo es acercar los Objetivos de Desarrollo Sostenible a estudiantes, ninos y usuarios jovenes mediante una experiencia visual, interactiva y gamificada.
+
+El proyecto ayuda a:
+
+- Explicar los ODS con lenguaje sencillo y recursos multimedia.
+- Promover habitos sostenibles como reciclar, cuidar el agua, evitar contaminacion y proteger ecosistemas.
+- Motivar el aprendizaje mediante misiones, puntos, niveles, insignias y ranking.
+- Apoyar clases, talleres, ferias educativas o actividades de conciencia ambiental.
+- Mostrar informacion simulada en dashboard, mapa y reportes para facilitar la comprension de problemas ambientales.
+
+La utilidad principal no es reemplazar una campana ambiental real, sino funcionar como una plataforma digital de aprendizaje y sensibilizacion que convierte la sostenibilidad en una experiencia participativa.
+
 ## Objetivo del MVP
 
 Crear una aplicacion React moderna que conecte aprendizaje ambiental, interaccion multimedia y datos persistentes en Supabase.
@@ -48,6 +62,7 @@ ODS trabajados:
 - Biblioteca ODS con contenido educativo y fuentes oficiales en espanol.
 - Reportes de Impacto ODS con filtros, hallazgos y recomendaciones.
 - Sonidos de interfaz con Web Audio API.
+- Inicio con seccion de impacto social, cinta animada de acciones sostenibles y elementos ambientales en movimiento.
 - Diseno responsivo.
 
 ## Instalacion
@@ -105,6 +120,7 @@ Si la base ya existia antes de las mejoras, ejecutar tambien:
 
 1. `supabase/migracion_preguntas_ods_pedagogicas.sql`
 2. `supabase/migracion_biblioteca_ods_enriquecida.sql`
+3. `supabase/migracion_mapa_ods_datos_referenciados.sql`
 
 ## Tablas principales
 
@@ -115,6 +131,7 @@ Si la base ya existia antes de las mejoras, ejecutar tambien:
 - `emisiones_mensuales`
 - `indicadores_radar`
 - `zonas_riesgo`
+- `zonas_riesgo_ods`
 - `preguntas_ods`
 - `puntajes_juego`
 - `insignias`

@@ -1,3 +1,5 @@
+import { Droplets, Leaf, Recycle, Trees } from 'lucide-react'
+
 const particles = [
   ['8%', '18%', '8s', '0s'],
   ['18%', '72%', '11s', '-2s'],
@@ -7,12 +9,35 @@ const particles = [
   ['84%', '62%', '13s', '-3s'],
 ]
 
+const floatingSymbols = [
+  ['12%', '28%', '10s', '-1s', Leaf],
+  ['24%', '86%', '13s', '-4s', Recycle],
+  ['76%', '16%', '11s', '-2s', Droplets],
+  ['88%', '72%', '12s', '-5s', Trees],
+]
+
 function AmbientBackground() {
   return (
     <>
       <div className="pointer-events-none fixed inset-0 ambient-grid opacity-45" />
-      <div className="pointer-events-none fixed left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-emerald-400/10 blur-3xl" />
-      <div className="pointer-events-none fixed bottom-8 right-6 h-80 w-80 rounded-full bg-sky-400/10 blur-3xl" />
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div className="ambient-wave ambient-wave-a" />
+        <div className="ambient-wave ambient-wave-b" />
+        {floatingSymbols.map(([left, top, duration, delay, Icon]) => (
+          <span
+            key={`${left}-${top}`}
+            className="ambient-symbol"
+            style={{
+              left,
+              top,
+              '--duration': duration,
+              '--delay': delay,
+            }}
+          >
+            <Icon className="size-5" />
+          </span>
+        ))}
+      </div>
       <div className="particle-field fixed">
         {particles.map(([left, top, duration, delay]) => (
           <span

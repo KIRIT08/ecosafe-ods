@@ -1,5 +1,5 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react'
-import { Gamepad2, Play, RotateCcw } from 'lucide-react'
+import { ArrowDown, ArrowLeft, ArrowRight, ArrowUp, Gamepad2, Play, RotateCcw } from 'lucide-react'
 import { motion } from 'framer-motion'
 import Button from '../ui/Button'
 import { rectanglesCollide } from '../../game/collisions'
@@ -294,7 +294,7 @@ const GameCanvas = forwardRef(function GameCanvas({ onStatsChange, onStatusChang
     tickRef.current += 1
     spawnTimerRef.current += 1
 
-    const movement = getMovement(inputRef.current?.keys || new Set())
+    const movement = getMovement(inputRef.current?.activeKeys || inputRef.current?.keys || new Set())
     const player = playerRef.current
     playerRef.current = {
       ...player,
@@ -349,13 +349,24 @@ const GameCanvas = forwardRef(function GameCanvas({ onStatsChange, onStatusChang
   const overlay =
     status === 'idle' || status === 'paused' || status === 'gameOver' || status === 'victory'
 
+  const touchButtons = [
+    { direction: 'up', label: 'Arriba', icon: ArrowUp, className: 'col-start-2 row-start-1' },
+    { direction: 'left', label: 'Izquierda', icon: ArrowLeft, className: 'col-start-1 row-start-2' },
+    { direction: 'down', label: 'Abajo', icon: ArrowDown, className: 'col-start-2 row-start-2' },
+    { direction: 'right', label: 'Derecha', icon: ArrowRight, className: 'col-start-3 row-start-2' },
+  ]
+
+  function handleTouchDirection(direction, active) {
+    inputRef.current?.setTouchDirection(direction, active)
+  }
+
   return (
-    <div className="relative overflow-hidden rounded-b-lg bg-slate-950">
+    <div className="relative min-h-[21rem] overflow-hidden rounded-b-lg bg-slate-950 sm:min-h-0">
       <canvas
         ref={canvasRef}
         width={GAME_WIDTH}
         height={GAME_HEIGHT}
-        className="block h-auto w-full"
+        className="block h-full min-h-[21rem] w-full sm:h-auto sm:min-h-0"
         aria-label="Videojuego Canvas EcoGuard ODS"
       />
 
@@ -363,11 +374,11 @@ const GameCanvas = forwardRef(function GameCanvas({ onStatsChange, onStatusChang
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 grid place-items-center bg-slate-950/55 px-4 text-center backdrop-blur-[2px]"
+          className="absolute inset-0 grid place-items-center overflow-y-auto bg-slate-950/55 px-3 py-4 text-center backdrop-blur-[2px] sm:px-4"
         >
-          <div className="max-w-md rounded-lg border border-white/10 bg-slate-950/85 p-6 shadow-2xl shadow-emerald-950/40">
-            <Gamepad2 className="mx-auto size-12 text-emerald-300" />
-            <h3 className="mt-4 text-2xl font-black tracking-normal text-white">
+          <div className="max-w-md rounded-lg border border-white/10 bg-slate-950/85 p-4 shadow-2xl shadow-emerald-950/40 sm:p-6">
+            <Gamepad2 className="mx-auto size-10 text-emerald-300 sm:size-12" />
+            <h3 className="mt-3 text-xl font-black tracking-normal text-white sm:mt-4 sm:text-2xl">
               {status === 'victory'
                 ? 'Mision completada'
                 : status === 'gameOver'
@@ -377,12 +388,12 @@ const GameCanvas = forwardRef(function GameCanvas({ onStatsChange, onStatusChang
                     : 'EcoGuard ODS'}
             </h3>
             <p className="mt-2 text-sm leading-6 text-slate-300">
-              Usa flechas o WASD. Recoge objetos buenos. Evita contaminantes. Cada accion
-              ayuda a un ODS. Aprende jugando.
+              Usa flechas, WASD o los botones tactiles. Recoge objetos buenos. Evita
+              contaminantes. Cada accion ayuda a un ODS.
             </p>
             {status === 'idle' && (
-              <div className="mt-4 grid gap-2 text-left text-xs font-bold text-slate-300">
-                <span>1. Muevete con flechas.</span>
+              <div className="mt-3 grid gap-2 text-left text-xs font-bold text-slate-300 sm:mt-4">
+                <span>1. Muevete con flechas o botones tactiles.</span>
                 <span>2. Recoge botellas, agua y arboles.</span>
                 <span>3. Evita humo y basura peligrosa.</span>
               </div>
@@ -403,7 +414,33 @@ const GameCanvas = forwardRef(function GameCanvas({ onStatsChange, onStatusChang
       )}
 
       <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg border border-white/10 bg-slate-950/60 px-3 py-2 text-xs font-bold text-slate-300">
-        WASD / Flechas
+        Teclado / Tactil
+      </div>
+
+      <div className="absolute bottom-3 right-3 grid grid-cols-3 grid-rows-2 gap-2 sm:hidden">
+        {touchButtons.map(({ direction, label, icon: Icon, className }) => (
+          <button
+            key={direction}
+            type="button"
+            aria-label={label}
+            onPointerDown={(event) => {
+              event.preventDefault()
+              handleTouchDirection(direction, true)
+            }}
+            onPointerUp={(event) => {
+              event.preventDefault()
+              handleTouchDirection(direction, false)
+            }}
+            onPointerCancel={() => handleTouchDirection(direction, false)}
+            onPointerLeave={() => handleTouchDirection(direction, false)}
+            className={[
+              'grid size-11 touch-none place-items-center rounded-lg border border-emerald-200/25 bg-slate-950/75 text-emerald-200 shadow-lg shadow-slate-950/30 backdrop-blur transition active:scale-95 active:bg-emerald-300 active:text-emerald-950',
+              className,
+            ].join(' ')}
+          >
+            <Icon className="size-5" />
+          </button>
+        ))}
       </div>
 
       {feedback && (

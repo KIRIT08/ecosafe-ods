@@ -8,6 +8,7 @@ import MapaRiesgos from '../pages/MapaRiesgos'
 import Perfil from '../pages/Perfil'
 import Register from '../pages/Register'
 import Reportes from '../pages/Reportes'
+import ResetPassword from '../pages/ResetPassword'
 import Videojuego from '../pages/Videojuego'
 import ProtectedRoute from './ProtectedRoute'
 
@@ -17,6 +18,7 @@ function AppRoutes() {
       <Route path="/" element={<Navigate to="/inicio" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route
         element={
           <ProtectedRoute>

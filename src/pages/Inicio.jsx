@@ -1,17 +1,24 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import {
+  Activity,
+  ArrowRight,
   BarChart3,
   BookOpen,
   Droplets,
   FileText,
   Gamepad2,
   GraduationCap,
+  HeartHandshake,
   Leaf,
   MapPin,
   Recycle,
+  ShieldCheck,
+  Target,
   Trees,
   User,
+  Users,
 } from 'lucide-react'
 import Badge from '../components/ui/Badge'
 import Card from '../components/ui/Card'
@@ -111,9 +118,66 @@ const iconByOds = {
 }
 
 const rotatingPhrases = [
-  'Cada decision sostenible suma al futuro que queremos construir.',
-  'Aprender sobre los ODS tambien es una forma de actuar.',
-  'La sostenibilidad empieza con acciones pequenas y constantes.',
+  'Aprende acciones sostenibles que puedes aplicar en tu colegio o comunidad.',
+  'Explora datos, juega misiones y entiende por que los ODS importan.',
+  'La educacion ambiental funciona mejor cuando tambien se practica.',
+]
+
+const actionRibbon = [
+  'Separar residuos',
+  'Cuidar el agua',
+  'Reducir humo',
+  'Plantar arboles',
+  'Aprender ODS',
+  'Compartir buenas practicas',
+  'Medir participacion',
+  'Actuar en comunidad',
+]
+
+const socialImpactCards = [
+  {
+    title: 'Educa con interaccion',
+    description: 'Convierte los ODS en una experiencia visual, sencilla y cercana para estudiantes.',
+    icon: GraduationCap,
+    tone: 'text-sky-200 bg-sky-400/10 border-sky-300/25',
+  },
+  {
+    title: 'Motiva habitos reales',
+    description: 'Refuerza acciones como reciclar, cuidar agua, evitar humo y proteger areas verdes.',
+    icon: HeartHandshake,
+    tone: 'text-lime-200 bg-lime-400/10 border-lime-300/25',
+  },
+  {
+    title: 'Mide participacion',
+    description: 'Usa puntos, niveles, reportes y ranking para visualizar avance educativo.',
+    icon: Target,
+    tone: 'text-amber-200 bg-amber-400/10 border-amber-300/25',
+  },
+  {
+    title: 'Apoya talleres',
+    description: 'Puede usarse en clases, ferias ambientales y actividades de sensibilizacion.',
+    icon: Users,
+    tone: 'text-emerald-200 bg-emerald-400/10 border-emerald-300/25',
+  },
+]
+
+const impactStats = [
+  ['6', 'ODS trabajados', 'Educacion, agua, ciudades, consumo, clima y ecosistemas'],
+  ['4', 'modos de aprender', 'Datos, mapa, biblioteca y videojuego Canvas'],
+  ['100%', 'enfoque multimedia', 'Animaciones, sonidos, interaccion y gamificacion'],
+]
+
+const taughtActions = [
+  { label: 'Reciclar residuos', icon: Recycle, ods: 'ODS 12' },
+  { label: 'Cuidar el agua', icon: Droplets, ods: 'ODS 6' },
+  { label: 'Evitar contaminacion', icon: ShieldCheck, ods: 'ODS 13' },
+  { label: 'Proteger ecosistemas', icon: Trees, ods: 'ODS 15' },
+]
+
+const floatingTokens = [
+  { icon: Droplets, label: 'ODS 6', className: 'left-[64%] top-[18%] animation-delay-0' },
+  { icon: Recycle, label: 'ODS 12', className: 'left-[82%] top-[46%] animation-delay-2' },
+  { icon: Trees, label: 'ODS 15', className: 'left-[56%] top-[66%] animation-delay-4' },
 ]
 
 function getLevelNumber(level) {
@@ -216,12 +280,31 @@ function Inicio() {
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.45, ease: 'easeOut' }}
-        className="overflow-hidden rounded-lg border border-white/10 bg-[radial-gradient(circle_at_75%_20%,rgba(134,239,172,0.22),transparent_22rem),linear-gradient(135deg,rgba(15,42,53,0.95),rgba(6,24,38,0.84))] p-6 shadow-2xl sm:p-8"
+        className="relative overflow-hidden rounded-lg border border-lime-100/10 bg-[linear-gradient(135deg,rgba(28,74,62,0.96),rgba(20,62,74,0.9)),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:auto,56px_56px,56px_56px] p-6 shadow-2xl sm:p-8"
       >
-        <div className="max-w-3xl">
+        <div className="absolute inset-0 opacity-50">
+          <div className="impact-scanline" />
+        </div>
+        {floatingTokens.map(({ icon: Icon, label, className }) => (
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className={[
+              'absolute hidden rounded-lg border border-white/10 bg-slate-950/45 px-3 py-2 text-xs font-black text-emerald-100 shadow-xl shadow-emerald-950/20 backdrop-blur md:flex md:items-center md:gap-2 animate-float-slow',
+              className,
+            ].join(' ')}
+          >
+            <Icon className="size-4 text-lime-300" />
+            {label}
+          </motion.div>
+        ))}
+
+        <div className="relative max-w-3xl">
           <Badge icon={Leaf}>{safeProfile.nivel}</Badge>
-          <h1 className="mt-4 text-4xl font-black tracking-normal text-white sm:text-5xl">
-            Bienvenido, {safeProfile.nombre}
+          <h1 className="mt-4 max-w-3xl text-4xl font-black tracking-normal text-white sm:text-5xl">
+            Aprende ODS con acciones para tu comunidad
           </h1>
           <motion.p
             key={phraseIndex}
@@ -232,9 +315,41 @@ function Inicio() {
           >
             {rotatingPhrases[phraseIndex]}
           </motion.p>
+          <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-emerald-100">
+            Hola, {safeProfile.nombre}. EcoSafe ODS ayuda a explicar sostenibilidad con
+            actividades visuales: datos, mapa, biblioteca, reportes y un juego que enseña
+            habitos ambientales simples.
+          </p>
           <ProgressBar className="mt-8 max-w-xl" label="Progreso ODS" value={progress} />
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href="#impacto-social"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-emerald-300/25 bg-emerald-400/15 px-4 text-sm font-black text-emerald-50 transition hover:border-emerald-200/60 hover:bg-emerald-300/20"
+            >
+              Ver contribucion social
+              <ArrowRight className="size-4" />
+            </a>
+            <Link
+              to="/videojuego"
+              className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-amber-300/25 bg-amber-400/10 px-4 text-sm font-black text-amber-50 transition hover:border-amber-200/60 hover:bg-amber-300/20"
+            >
+              Aprender jugando
+              <Gamepad2 className="size-4" />
+            </Link>
+          </div>
         </div>
       </motion.div>
+
+      <div className="overflow-hidden rounded-lg border border-emerald-300/15 bg-slate-950/45 py-3">
+        <div className="animate-marquee flex w-max gap-6 text-sm font-black uppercase text-emerald-100">
+          {[...actionRibbon, ...actionRibbon].map((item, index) => (
+            <span key={`${item}-${index}`} className="flex items-center gap-3">
+              <Leaf className="size-4 text-lime-300" />
+              {item}
+            </span>
+          ))}
+        </div>
+      </div>
 
       {error && (
         <Card className="border-amber-300/30 bg-amber-400/10">
@@ -268,6 +383,82 @@ function Inicio() {
           tone="lime"
         />
       </div>
+
+      <section id="impacto-social" className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+        <Card className="relative overflow-hidden">
+          <div className="absolute -right-10 -top-10 size-36 rounded-full bg-lime-300/10 blur-2xl" />
+          <div className="relative">
+            <Badge icon={HeartHandshake}>Contribucion social</Badge>
+            <h2 className="mt-4 text-2xl font-black tracking-normal text-white">
+              EcoSafe ODS sirve como apoyo educativo para hablar de sostenibilidad.
+            </h2>
+            <p className="mt-4 text-sm leading-6 text-slate-300">
+              El proyecto organiza informacion y actividades para que estudiantes entiendan
+              mejor como acciones cotidianas pueden ayudar al agua, al clima, a las ciudades
+              y a los ecosistemas.
+            </p>
+            <div className="mt-5 grid gap-3">
+              {impactStats.map(([value, label, description]) => (
+                <div
+                  key={label}
+                  className="rounded-lg border border-white/10 bg-white/[0.04] p-4"
+                >
+                  <p className="text-3xl font-black tracking-normal text-lime-300">{value}</p>
+                  <p className="mt-1 text-sm font-black text-white">{label}</p>
+                  <p className="mt-1 text-sm leading-5 text-slate-400">{description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        <div className="grid gap-4 sm:grid-cols-2">
+          {socialImpactCards.map(({ title, description, icon: Icon, tone }, index) => (
+            <motion.article
+              key={title}
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.4, delay: index * 0.06 }}
+              className="glass-panel rounded-lg p-5 transition duration-300 hover:-translate-y-1 hover:border-emerald-300/35"
+            >
+              <div className={['grid size-12 place-items-center rounded-lg border', tone].join(' ')}>
+                <Icon className="size-6" />
+              </div>
+              <h3 className="mt-4 text-lg font-black tracking-normal text-white">{title}</h3>
+              <p className="mt-2 text-sm leading-6 text-slate-400">{description}</p>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="glass-panel overflow-hidden rounded-lg p-5">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <Badge icon={Activity}>Acciones que enseña</Badge>
+            <h2 className="mt-3 text-2xl font-black tracking-normal text-white">
+              De la pantalla a la vida diaria
+            </h2>
+          </div>
+          <p className="max-w-xl text-sm leading-6 text-slate-400">
+            Cada modulo refuerza una accion sencilla que puede convertirse en habito:
+            aprender, reciclar, cuidar recursos y proteger el entorno.
+          </p>
+        </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          {taughtActions.map(({ label, icon: Icon, ods }) => (
+            <div
+              key={label}
+              className="group relative overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] p-4"
+            >
+              <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-300 via-sky-300 to-amber-300 opacity-60 transition group-hover:opacity-100" />
+              <Icon className="size-8 text-emerald-200" />
+              <p className="mt-4 text-sm font-black text-white">{label}</p>
+              <p className="mt-1 text-xs font-black uppercase text-lime-300">{ods}</p>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-4 lg:grid-cols-3">
         {summaryIndicators.map((indicator) => {
